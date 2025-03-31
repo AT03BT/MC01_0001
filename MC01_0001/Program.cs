@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MC01_0001.Data;
 using MvcMovie.Models;
 
-
+var SEED_DATA = false;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MovieCatalogueDbContext>(options =>
@@ -21,8 +21,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
-    SeedData.Initialize(services);
+    if (SEED_DATA == true)
+    {
+        SeedData.Initialize(services);
+    }
 }
 
 // Configure the HTTP request pipeline.
