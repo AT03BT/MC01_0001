@@ -6,6 +6,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using MC01_0001.Data;
+using MvcMovie.Models;
 
 
 
@@ -16,6 +17,13 @@ builder.Services.AddDbContext<MovieCatalogueDbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
