@@ -16,7 +16,7 @@ using MC01_0001.Data;
 using System;
 using System.Linq;
 
-namespace MvcMovie.Models;
+namespace MC01_0001.Models;
 
 public static class SeedData
 {

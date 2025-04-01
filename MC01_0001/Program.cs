@@ -10,15 +10,27 @@
 */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
+using MC01_0001.Models;
 using MC01_0001.Data;
-using MvcMovie.Models;
 
 var SEED_DATA = false;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MovieCatalogueDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString)); // Or your database provider
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>() // Add roles
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -43,13 +55,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Movies}/{action=Index}/{id?}");
-
+app.MapRazorPages();
 app.Run();

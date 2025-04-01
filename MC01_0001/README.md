@@ -15,7 +15,17 @@ HISTORY
 
 STEP 4. Add Authentication
 --------------------------
+
+dotnet add package Microsoft.AspNetCore.Identity.UI -v 8.*
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore -v 8.*
+dotnet aspnet-codegenerator identity -dc MC01_0001.Data.ApplicationDbContext --files 
+	"Account.Register;Account.Login;Account.Logout;
+	 Account.Manage.Index;Account.Manage.ChangePassword;
+	 Account.Manage.Email;Account.Manage.TwoFactorAuthentication;
+	 Account.Manage.ExternalLogins"
+
+dotnet ef migrations add --context ApplicationDbContext IdentityUpdate
+dotnet ef database update --context ApplicationDbContext
 
 STEP 3. Keep the database in sync with the model
 ------------------------------------------------
