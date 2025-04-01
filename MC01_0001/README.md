@@ -13,6 +13,10 @@ https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?
 HISTORY
 =======
 
+STEP 4. Add Authentication
+--------------------------
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore -v 8.*
+
 STEP 3. Keep the database in sync with the model
 ------------------------------------------------
 dotnet ef migrations add MovieDbContextUpdate, dotnet ef database update
