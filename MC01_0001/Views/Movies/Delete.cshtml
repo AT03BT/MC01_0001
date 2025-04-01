@@ -1,4 +1,14 @@
-﻿@model MC01_0001.Models.Movie
+﻿@* 
+    Views/Movies/Delete.cshtml
+    Version: 1.0.0
+    (c) 2024, Minh Tri Tran, with assistance from Google's Gemini - Licensed under CC BY 4.0
+    https://creativecommons.org/licenses/by/4.0/
+
+    This work builds upon concepts and examples from:
+    "Get started with ASP.NET Core MVC | Microsoft Learn"
+    https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio
+ *@
+@model MC01_0001.Models.Movie
 
 @{
     ViewData["Title"] = "Delete";
@@ -28,6 +38,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Genre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rating)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Price)

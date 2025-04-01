@@ -1,4 +1,14 @@
-﻿@model MC01_0001.Models.Movie
+﻿@* 
+    Views/Movies/Create.cshtml
+    Version: 1.0.0
+    (c) 2024, Minh Tri Tran, with assistance from Google's Gemini - Licensed under CC BY 4.0
+    https://creativecommons.org/licenses/by/4.0/
+
+    This work builds upon concepts and examples from:
+    "Get started with ASP.NET Core MVC | Microsoft Learn"
+    https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio
+ *@
+@model MC01_0001.Models.Movie
 
 @{
     ViewData["Title"] = "Create";
@@ -26,6 +36,11 @@
                 <label asp-for="Genre" class="control-label"></label>
                 <input asp-for="Genre" class="form-control" />
                 <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label"></label>
+                <input asp-for="Rating" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
