@@ -23,14 +23,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MovieCatalogueDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("SqliteMovieCatalog")));
 
-var connectionString = builder.Configuration.GetConnectionString("SqliteIdentity") ?? 
-    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString)); // Or your database provider
-
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>() // Add roles
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<MovieCatalogueDbContext>();
 
 builder.Services.AddScoped<UserManager<ApplicationUser>, CustomUserManager>();
 

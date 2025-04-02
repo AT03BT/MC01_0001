@@ -13,6 +13,12 @@ https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?
 HISTORY
 =======
 
+STEP 7. Refactor the code
+-------------------------
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+
 
 STEP 6. Add Comment Functionality
 ---------------------

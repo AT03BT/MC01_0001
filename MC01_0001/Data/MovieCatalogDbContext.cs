@@ -8,14 +8,16 @@
     "Get started with ASP.NET Core MVC | Microsoft Learn"
     https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio
 */
-
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 using MC01_0001.Models;
 
 namespace MC01_0001.Data
 {
 
-    public class MovieCatalogueDbContext : DbContext
+    public class MovieCatalogueDbContext : IdentityDbContext<ApplicationUser>
     {
         public MovieCatalogueDbContext(DbContextOptions<MovieCatalogueDbContext> options) : base(options) { }
 
