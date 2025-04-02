@@ -19,6 +19,8 @@ using Microsoft.EntityFrameworkCore;
 
 using MC01_0001.Data;
 using MC01_0001.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace MC01_0001.Controllers
@@ -26,13 +28,15 @@ namespace MC01_0001.Controllers
     public class MoviesController : Controller
     {
         private readonly MovieCatalogueDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MoviesController(MovieCatalogueDbContext context)
+        public MoviesController(MovieCatalogueDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string movieGenre, string searchString)
         {
             if (_context.Movies == null)
@@ -67,6 +71,7 @@ namespace MC01_0001.Controllers
         }
 
 
+        [AllowAnonymous] // Assuming you want anyone to see comments
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -75,7 +80,9 @@ namespace MC01_0001.Controllers
             }
 
             var movie = await _context.Movies
+                .Include(m => m.Comments) // Eager load comments
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movie == null)
             {
                 return NotFound();
@@ -85,6 +92,47 @@ namespace MC01_0001.Controllers
         }
 
 
+        [HttpPost]
+        [Authorize(Policy = "AuthenticatedUsers")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateComment(int movieId, string content)
+        {
+            if (string.IsNullOrEmpty(content))
+            {
+                return BadRequest("Comment content is required."); // Or handle this more gracefully
+            }
+
+            var movie = await _context.Movies.FindAsync(movieId);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User); // Get the current user
+            if (user == null)
+            {
+                return Unauthorized(); // Or handle this more gracefully
+            } else
+            {
+
+            }
+
+            var comment = new Comment
+            {
+                Movie = movie,
+                Content = content,
+                User = user
+            };
+
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = movieId }); // Redirect back to details page
+        }
+
+
+        [HttpPost]
+        [Authorize(Policy = "CanEditMovies")]
         public IActionResult Create()
         {
             return View();
@@ -95,6 +143,7 @@ namespace MC01_0001.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Policy = "CanEditMovies")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
         {
@@ -109,6 +158,7 @@ namespace MC01_0001.Controllers
 
 
         // GET: Movies/Edit/5
+        [Authorize(Policy = "CanEditMovies")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -129,6 +179,7 @@ namespace MC01_0001.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Policy = "CanEditMovies")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating")] Movie movie)
         {
@@ -162,6 +213,7 @@ namespace MC01_0001.Controllers
 
 
         // GET: Movies/Delete/5
+        [Authorize(Policy = "CanEditMovies")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -181,6 +233,7 @@ namespace MC01_0001.Controllers
 
 
         // POST: Movies/Delete/5
+        [Authorize(Policy = "CanEditMovies")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

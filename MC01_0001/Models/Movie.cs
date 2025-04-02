@@ -9,6 +9,7 @@
     https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio
 */
 
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,5 +41,26 @@ namespace MC01_0001.Models
         [StringLength(5)]
         [Required]
         public string? Rating { get; set; }
+
+        public ICollection<Comment> Comments { get; set; } // Add this line
+    }
+
+
+    public class Comment
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public string Content { get; set; }
+
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow; // Set to current time by default
+
+        // Foreign key to the Movie
+        public int MovieId { get; set; }
+        public Movie Movie { get; set; }
+
+        // Foreign key to the User (ApplicationUser)
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

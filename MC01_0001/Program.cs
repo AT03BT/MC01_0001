@@ -14,21 +14,39 @@ using Microsoft.AspNetCore.Identity;
 
 using MC01_0001.Models;
 using MC01_0001.Data;
+using MC01_0001.Areas.Identity.Services;
 
-var SEED_DATA = false;
+var SEED_DATA = true;
+var ADD_ROLES = true;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MovieCatalogueDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("SqliteMovieCatalog")));
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+var connectionString = builder.Configuration.GetConnectionString("SqliteIdentity") ?? 
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString)); // Or your database provider
+    options.UseSqlite(connectionString)); // Or your database provider
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>() // Add roles
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped<UserManager<ApplicationUser>, CustomUserManager>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AuthenticatedUsers", policy =>
+        policy.RequireAuthenticatedUser());
+
+    options.AddPolicy("CanEditMovies", policy =>
+        policy.RequireAuthenticatedUser()
+               .RequireRole("Admin", "Editor"));
+
+    options.AddPolicy("CanMakeComments", policy =>
+        policy.RequireAuthenticatedUser()
+               .RequireRole("Admin", "Editor", "User"));
+});
 
 
 // Add services to the container.
@@ -61,4 +79,39 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Movies}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+if(ADD_ROLES == true) { 
+    using (var scope = app.Services.CreateScope())
+    {
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+
+        if (!await roleManager.RoleExistsAsync("Editor"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Editor"));
+        }
+
+        if (!await roleManager.RoleExistsAsync("User"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("User"));
+        }
+
+        // Assign a user to a role (example)
+        var adminUser = await userManager.FindByEmailAsync("superbomb@outlook.com");
+        if (adminUser != null)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+        var adminUser2 = await userManager.FindByEmailAsync("jeffry@outlook.com");
+        if (adminUser2 != null)
+        {
+            await userManager.AddToRoleAsync(adminUser2, "Admin");
+        }
+    }
+}
 app.Run();

@@ -13,6 +13,26 @@ https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?
 HISTORY
 =======
 
+
+STEP 6. Add Comment Functionality
+---------------------
+dotnet ef migrations add InitialCreate --context ApplicationDbContext
+dotnet ef database update --context ApplicationDbContext
+
+dotnet ef migrations add AddMovieCatalogue --context MovieCatalogueDbContext
+dotnet ef database update --context MovieCatalogueDbContext
+
+
+
+STEP 5. Add User Data
+---------------------
+
+dotnet ef migrations add AddUserProfileFields --context ApplicationDbContext
+dotnet ef database update --context ApplicationDbContext
+
+dotnet ef migrations add AddComments --context MovieCatalogueDbContext
+dotnet ef database update --context MovieCatalogueDbContext
+
 STEP 4. Add Authentication
 --------------------------
 
@@ -24,8 +44,11 @@ dotnet aspnet-codegenerator identity -dc MC01_0001.Data.ApplicationDbContext --f
 	 Account.Manage.Email;Account.Manage.TwoFactorAuthentication;
 	 Account.Manage.ExternalLogins"
 
-dotnet ef migrations add --context ApplicationDbContext IdentityUpdate
+dotnet ef migrations add InitialCreate  --context ApplicationDbContext
 dotnet ef database update --context ApplicationDbContext
+
+dotnet ef migrations add MovieCatalogueAddition --context MovieCatalogueDbContext
+dotnet ef database update --context MovieCatalogueDbContext
 
 STEP 3. Keep the database in sync with the model
 ------------------------------------------------
