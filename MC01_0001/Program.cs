@@ -97,15 +97,25 @@ if(ADD_ROLES == true) {
         }
 
         // Assign a user to a role (example)
-        var adminUser = await userManager.FindByEmailAsync("superbomb@outlook.com");
+        var adminUser = await userManager.FindByEmailAsync("superbomb@moviecatalogue.com");
         if (adminUser != null)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
         }
-        var adminUser2 = await userManager.FindByEmailAsync("jeffry@outlook.com");
-        if (adminUser2 != null)
+        adminUser = await userManager.FindByEmailAsync("quincy@moviecatalogue.com");
+        if (adminUser != null)
         {
-            await userManager.AddToRoleAsync(adminUser2, "Admin");
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+        adminUser = await userManager.FindByEmailAsync("phil@moviecatalogue.com");
+        if (adminUser != null)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+        adminUser = await userManager.FindByEmailAsync("george@moviecatalogue.com");
+        if (adminUser != null)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
         }
     }
 }
