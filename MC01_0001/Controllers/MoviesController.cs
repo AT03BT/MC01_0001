@@ -131,7 +131,7 @@ namespace MC01_0001.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Authorize(Policy = "CanEditMovies")]
         public IActionResult Create()
         {
