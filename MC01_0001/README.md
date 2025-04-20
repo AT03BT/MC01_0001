@@ -7,7 +7,7 @@ This work builds upon concepts and examples from:
 "Get started with ASP.NET Core MVC | Microsoft Learn"
 https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio
 
-If you like my work, please consider supporting me by checking out my music on YouTube:
+I need your help, pray for me and support by checking out my music on YouTube:
 https://youtube.com/shorts/Q921NmrtY9c
 Please leave a good comment and like.
 

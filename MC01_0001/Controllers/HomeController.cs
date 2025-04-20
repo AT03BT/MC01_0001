@@ -5,7 +5,7 @@
     (c) 2024, Minh Tri Tran, with assistance from Google's Gemini - Licensed under CC BY 4.0
     https://creativecommons.org/licenses/by/4.0/
 
-    If you like my work, please consider supporting me by checking out my music on YouTube:
+    I need your help, support me by checking out my music on YouTube:
     https://youtube.com/shorts/Q921NmrtY9c
     Please leave a good comment and like.
 */
